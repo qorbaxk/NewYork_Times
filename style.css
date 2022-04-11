@@ -13,7 +13,19 @@ h2{
 }
 p{
     font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-clamp: 3;
+    -webkit-box-orient: vertical;
+
+    
+    line-height: 1.2em;
+    height: 5.8em;
+
 }
+
 .news-author{
     font-size: 12px;
 }
@@ -108,14 +120,14 @@ p{
 /*모바일 버전*/
   @media screen and (max-width: 1025px) {
     .menus button{display: none;}
-    .search-area{ width: 40vw;}
+    #search-area{ width: 40vw;}
 
   }
 /*pc 버전*/
   @media screen and (min-width: 1025px) {
     .sidenav {display: none;}
     .menubar {visibility: hidden;}
-    .search-area{width: auto;}
+    #search-area{width: auto;}
   }
 
 .menubar{
@@ -141,7 +153,7 @@ p{
     width: 16px;
 }
 
-.search-area{
+#search-area{
     display: inline-block;
     box-sizing: border-box;
     color:rgb(102,102,102);
@@ -153,7 +165,7 @@ p{
     height: 33px;
 }
 
-.search-submit{
+#search-submit{
     background-color: rgb(86, 123, 149);
     color:white;
     border: 1px solid rgb(50, 104, 145);
@@ -179,3 +191,5 @@ p{
     display: none;
    
 }
+
+

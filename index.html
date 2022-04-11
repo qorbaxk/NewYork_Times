@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+ 
     <section class="container">
       <section>
         <section>
@@ -41,11 +42,11 @@
 
             <div id="search-display">
               <div style="float: left">
-                <input class="search-area" type="text" placeholder="SEARCH" />
+                <input id="search-area" type="text" placeholder="SEARCH" />
               </div>
 
               <div style="float: left">
-                <button class="search-submit">GO</button>
+                <button id="search-submit">GO</button>
               </div>
             </div>
           </div>
@@ -64,29 +65,27 @@
           <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
             >&times;</a
           >
+          <div class="m-menus">
           <a href="#">Sport</a>
           <a href="#">Tech</a>
           <a href="#">World</a>
-          <a href="#">Finance</a>
           <a href="#">Politics</a>
           <a href="#">Business</a>
           <a href="#">Economics</a>
           <a href="#">Entertainment</a>
           <a href="#">Beauty</a>
           <a href="#">Travel</a>
-          <a href="#">Sport</a>
           <a href="#">Music</a>
           <a href="#">Food</a>
           <a href="#">Science</a>
           <a href="#">Gaming</a>
-          <a href="#">Energy</a>
+          </div>
         </div>
 
         <div class="menus">
           <button>Sport</button>
           <button>Tech</button>
           <button>World</button>
-          <button>Finance</button>
           <button>Politics</button>
           <button>Business</button>
           <button>Economics</button>
@@ -97,7 +96,6 @@
           <button>Food</button>
           <button>Science</button>
           <button>Gaming</button>
-          <button>Energy</button>
         </div>
       </section>
 
@@ -113,6 +111,9 @@
       integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
       crossorigin="anonymous"
     ></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.0/moment.min.js"></script>
     <script src="main.js"></script>
+
   </body>
 </html>
