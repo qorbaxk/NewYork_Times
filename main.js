@@ -12,52 +12,78 @@ m_menus.forEach((menu) => menu.addEventListener("click",(event)=>getNewsByTopic(
 let submit = document.getElementById("search-submit");
 let searches = document.getElementById("search-area");
 
+//url 전역변수 지정
+let url;
 
-const headerSet = async (url) =>{
-  let header = new Headers({
-    "x-api-key": "tipwF8XKqzTe30KcJUQItYCw7ShucEbWaCLOQkODmfE",
-  });
 
-  let response = await fetch(url, { headers: header });
-  //ajax, http, fetch, axios 등으로 보낼 수 있음
-  //서버를 통신하는 애는 기다려줘야함
-  let data = await response.json();
-  //json은 서버통신에서 자주쓰이는 타입, 객체랑 똑같은데 text타입
-  news = data.articles;
 
-  console.log(news);
-  render();
+//반복되는 기본 api호출 세팅 함수
+const headerSet = async () =>{
+  try{
+    let header = new Headers({
+      "x-api-key": "tipwF8XKqzTe30KcJUQItYCw7ShucEbWaCLOQkODmfE",
+    });
+  
+    let response = await fetch(url, { headers: header });
+    //ajax, http, fetch, axios 등으로 보낼 수 있음
+    //서버를 통신하는 애는 기다려줘야함
+    let data = await response.json();
+    //json은 서버통신에서 자주쓰이는 타입, 객체랑 똑같은데 text타입
+
+    //API응답에서 에러가 났는지 확인할때
+    if(response.status == 200){
+      //데이터 검색시 결과값이 없을 때 에러핸들링
+      if(data.total_hits == 0){
+        throw new Error("검색된 결과가 없습니다.");
+      }
+      news = data.articles;
+      console.log(news);
+      render();
+    }else{
+      throw new Error(data.message)
+    }
+
+  }catch(error){
+      console.log("에러는",error.message);
+      errorRender(error.message);
+    }
+
 };
+
+
+ 
 
 //async와 await은 세트임
 //기본 화면
 const getLatesNews = async () => {  
   //URL이 api 분석해줌
-  let url = new URL(
+  url = new URL(
     `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&topic=sport&page_size=10`
   );
-  headerSet(url);
+  headerSet();
 };
 
 //뉴스 토픽설정
 const getNewsByTopic = async (event) =>{
   let topic = event.target.textContent.toLowerCase();
-  let url = new URL(
+  url = new URL(
      `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&page_size=10&topic=${topic}`
      );
-  headerSet(url);
+  headerSet();
 }
 
 //검색하기
 const searchNews = async() => {
 let keyword = searches.value;
-let url = new URL(
+url = new URL(
   `https://api.newscatcherapi.com/v2/search?q=${keyword}&countries=KR&page_size=10`
   );
-headerSet(url);
+headerSet();
 }
 
-//렌더하기
+
+
+//화면을 보여주는 렌더함수
 const render = () => {
     
     let resultHTML = '';
@@ -80,7 +106,12 @@ const render = () => {
     document.getElementById("news-thread").innerHTML = resultHTML;
 }
 
-
+//에러 렌더함수
+const errorRender = (message) =>{
+  let errorHTML = `<div class="alert alert-danger text-center" role="alert">
+  ${message}</div>`;
+  document.getElementById("news-thread").innerHTML = errorHTML;
+}
 
 //햄버거 바 열기
 function openNav() {
