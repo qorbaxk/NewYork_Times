@@ -53,7 +53,7 @@ p{
     margin: 5px;
 }
 .menus button:hover{
-    background-color: beige;
+    background-color: #F2EDD7;
 }
 .news-img-size{
     max-width: 100%;
@@ -192,4 +192,27 @@ p{
    
 }
 
+
+nav{
+    padding-top: 20px;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    color: #755139;
+    text-decoration: none;
+    background-color: #F2EDD7;
+    border: 1px solid #dee2e6;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #F2EDD7;
+    background-color: #755139;
+    border-color: #755139;
+}
 

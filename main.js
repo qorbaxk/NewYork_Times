@@ -1,5 +1,8 @@
 let news = [];
 
+let page = 1;
+let total_pages = 0;
+
 //토픽 선택 받아오기
 const menus = document.querySelectorAll(".menus button");
 const m_menus = document.querySelectorAll(".m-menus a");
@@ -18,12 +21,14 @@ let url;
 
 
 //반복되는 기본 api호출 세팅 함수
-const headerSet = async () =>{
+const getNews = async () =>{
   try{
     let header = new Headers({
       "x-api-key": "tipwF8XKqzTe30KcJUQItYCw7ShucEbWaCLOQkODmfE",
     });
-  
+    
+    //url에 페이지값을 추가하는 작업
+    url.searchParams.set('page',page);
     let response = await fetch(url, { headers: header });
     //ajax, http, fetch, axios 등으로 보낼 수 있음
     //서버를 통신하는 애는 기다려줘야함
@@ -36,9 +41,15 @@ const headerSet = async () =>{
       if(data.total_hits == 0){
         throw new Error("검색된 결과가 없습니다.");
       }
+      console.log(data); 
       news = data.articles;
+      total_pages = data.total_pages;
+      page = data.page;
       console.log(news);
+      
       render();
+      pagination();
+
     }else{
       throw new Error(data.message)
     }
@@ -60,7 +71,7 @@ const getLatesNews = async () => {
   url = new URL(
     `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&topic=sport&page_size=10`
   );
-  headerSet();
+  getNews();
 };
 
 //뉴스 토픽설정
@@ -69,7 +80,9 @@ const getNewsByTopic = async (event) =>{
   url = new URL(
      `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&page_size=10&topic=${topic}`
      );
-  headerSet();
+  
+  page = 1; //다른 카테고리로 옮길시 1페이지로 시작
+  getNews();
 }
 
 //검색하기
@@ -78,7 +91,7 @@ let keyword = searches.value;
 url = new URL(
   `https://api.newscatcherapi.com/v2/search?q=${keyword}&countries=KR&page_size=10`
   );
-headerSet();
+getNews();
 }
 
 
@@ -112,6 +125,91 @@ const errorRender = (message) =>{
   ${message}</div>`;
   document.getElementById("news-thread").innerHTML = errorHTML;
 }
+
+
+//페이지 네이션 함수
+const pagination = () => {
+
+  let paginationHTML = '';
+  //total_page 총 페이지 수
+  //page 내가 지금 몇페이지에 있는지
+  //page group 내가 어떤 페이지 그룹에 있는지
+  let pageGroup = Math.ceil(page/5); //다섯페이지씩 보여줄것
+  //last page 마지막페이지가 뭔지
+  let last = pageGroup*5;
+  //first page 첫번째페이지가 뭔지
+  let first = last-4;
+  //first~last 페이지 프린트
+
+  
+  //total page 3개 일경우, 3개의 페이지만 프린트 하는법 last,first
+  if(total_pages <= 5){
+    last = total_pages;
+    first = 1;
+  }
+
+  //마지막페이지가 5개로 안떨어지는 경우 마지막페이지에 맞춰 5개 보여주기
+  if(last > total_pages){
+    last = total_pages;
+  }
+
+  // <,> 이 화살표들은 한 그룹씩 띄어넘는 용도
+  // <<,>> 이 화살표들은 맨 처음 맨끝으로 가는 용도
+
+  //내가 그룹1 일때 << < 이 버튼이 없다
+  if(pageGroup==1){
+    paginationHTML ='';
+  }else{
+      //이전
+    paginationHTML = ` 
+    <li class="page-item">
+    <a class="page-link" href="#" aria-label="Previous" onclick="moveToPage(1)">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+    </li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="re-Previous" onclick="moveToPage(${((pageGroup-1)*5)-4})">
+        <span aria-hidden="true">&lsaquo;</span>
+      </a>
+    </li>`;
+  }
+
+  for(let i=first; i<=last; i++){
+    paginationHTML += `<li class="page-item ${page==i?"active":""}"><a class="page-link" href="#" onclick="moveToPage(${i})">${i}</a></li>`;
+    
+  }
+
+  //내가 마지막그룹일때 >> > 이 버튼이 없다
+  if(pageGroup==Math.ceil(total_pages/5)){
+    paginationHTML += '';
+  }else{
+      //이후
+    paginationHTML += `<li class="page-item">
+    <a class="page-link" href="#" aria-label="Next" onclick="moveToPage(${((pageGroup+1)*5)-4})">
+      <span aria-hidden="true">&rsaquo;</span>
+    </a>
+  </li>
+  <li class="page-item">
+        <a class="page-link" href="#" aria-label="re-Next" onclick="moveToPage(${total_pages})">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>`;
+  }
+
+
+  document.querySelector(".pagination").innerHTML = paginationHTML;
+};
+
+
+const moveToPage = (pageNum) =>{
+  //1.이동하고싶은 페이지를 알아야지
+  page = pageNum;
+  
+  //2. 이동하고 싶은 페이지를 가지고 api를 다시 호출해주자
+  getNews();
+}
+
+
 
 //햄버거 바 열기
 function openNav() {
