@@ -167,9 +167,9 @@ p{
 }
 
 #search-submit{
-    background-color: rgb(86, 123, 149);
+    background-color: rgb(0, 0, 0);
     color:white;
-    border: 1px solid rgb(50, 104, 145);
+    border: 1px solid rgb(0, 0, 0);
     border-radius: 3px;
     line-height: 11px;
     letter-spacing: 0.05em;

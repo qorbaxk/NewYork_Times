@@ -87,11 +87,13 @@ const getNewsByTopic = async (event) =>{
 
 //검색하기
 const searchNews = async() => {
-let keyword = searches.value;
-url = new URL(
-  `https://api.newscatcherapi.com/v2/search?q=${keyword}&countries=KR&page_size=10`
-  );
-getNews();
+  let keyword = searches.value;
+  url = new URL(
+    `https://api.newscatcherapi.com/v2/search?q=${keyword}&countries=KR&page_size=10`
+    );
+  
+  page = 1;
+  getNews();
 }
 
 
@@ -124,11 +126,14 @@ const errorRender = (message) =>{
   let errorHTML = `<div class="alert alert-danger text-center" role="alert">
   ${message}</div>`;
   document.getElementById("news-thread").innerHTML = errorHTML;
+  
 }
+
 
 
 //페이지 네이션 함수
 const pagination = () => {
+
 
   let paginationHTML = '';
   //total_page 총 페이지 수
