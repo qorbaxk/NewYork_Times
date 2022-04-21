@@ -73,7 +73,7 @@ const getNews = async () =>{
 const getLatesNews = async () => {  
   //URL이 api 분석해줌
   url = new URL(
-    `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&topic=sport&page_size=10`
+    `https://api.newscatcherapi.com/v2/latest_headlines?countries=KR&page_size=10`
   );
   getNews();
 };
