@@ -46,9 +46,9 @@ const getNews = async () =>{
       total_pages = data.total_pages;
       page = data.page;
       console.log(news);
-      
-      render();
       pagination();
+      render();
+      
 
     }else{
       throw new Error(data.message)
@@ -56,7 +56,11 @@ const getNews = async () =>{
 
   }catch(error){
       console.log("에러는",error.message);
+      page = 0;
+      total_pages = 0;
+      pagination();
       errorRender(error.message);
+      
     }
 
 };
@@ -126,6 +130,7 @@ const errorRender = (message) =>{
   let errorHTML = `<div class="alert alert-danger text-center" role="alert">
   ${message}</div>`;
   document.getElementById("news-thread").innerHTML = errorHTML;
+
   
 }
 
@@ -146,7 +151,8 @@ const pagination = () => {
   let first = last-4;
   //first~last 페이지 프린트
 
-  
+
+
   //total page 3개 일경우, 3개의 페이지만 프린트 하는법 last,first
   if(total_pages <= 5){
     last = total_pages;
@@ -162,7 +168,7 @@ const pagination = () => {
   // <<,>> 이 화살표들은 맨 처음 맨끝으로 가는 용도
 
   //내가 그룹1 일때 << < 이 버튼이 없다
-  if(pageGroup==1){
+  if(pageGroup==1 || pageGroup==0){
     paginationHTML ='';
   }else{
       //이전
@@ -203,6 +209,8 @@ const pagination = () => {
 
 
   document.querySelector(".pagination").innerHTML = paginationHTML;
+
+
 };
 
 
